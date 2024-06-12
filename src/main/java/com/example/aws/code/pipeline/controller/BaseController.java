@@ -12,7 +12,7 @@ public class BaseController {
 
     @GetMapping(path = "/ping")
     public ResponseEntity<String> ping(){
-     return new ResponseEntity<>("LIVENS", HttpStatus.OK);
+     return new ResponseEntity<>("Hello", HttpStatus.OK);
     }
 
 }
