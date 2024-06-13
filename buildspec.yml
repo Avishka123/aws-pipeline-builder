@@ -5,16 +5,23 @@ env:
     JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
     APPLICATION_NAME: "cpcoludregistry"
     IMAGE_TAG: "latest"
-    REPOSITORY_URI: $DOCKER_REGISTRY/$APPLICATION_NAME
+    REGION: us-east-1
   parameter-store:
     DOCKER_REGISTRY: registry
 
-phases: 
-  pre_build: 
-    commands: 
-    - echo Logging in to Amazon ECR.... 
-    - aws --version
-#    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR....
+      - aws --version
+      - $(aws ecr get-login --no-include-email --region $REGION)
+      # Get commit hash value to tag the image
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      # Replace with your application name
+      - APPLICATION_NAME=spring-boot-sample-app
+      # Replace with this 435320931996.dkr.ecr.ap-south-1.amazonaws.com to your repository URI
+      - REPOSITORY_URI=$DOCKER_REGISTRY/$APPLICATION_NAME
   build: 
     commands: 
     - echo Build started on `date` 
