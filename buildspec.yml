@@ -5,7 +5,7 @@ phases:
     - echo Logging in to Amazon ECR.... 
     - aws --version
     - $(aws ecr get-login --no-include-email --region us-east-1)
-    - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+    - COMMIT_HASH=latest
     - IMAGE_TAG=${COMMIT_HASH:=latest}
     - APPLICATION_NAME=code-pipeline-builder
     - REPOSITORY_URI= $(echo steps.login-ecr.outputs.registry)/$APPLICATION_NAME
