@@ -4,7 +4,7 @@ phases:
     commands: 
     - echo Logging in to Amazon ECR.... 
     - aws --version
-    - $(aws ecr get-login --no-include-email --region us-east-1)
+    - aws ecr get-login --no-include-email --region us-east-1
     - COMMIT_HASH=latest
     - IMAGE_TAG=${COMMIT_HASH:=latest}
     - APPLICATION_NAME=code-pipeline-builder
