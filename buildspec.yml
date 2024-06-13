@@ -14,7 +14,7 @@ phases:
     commands: 
     - echo Logging in to Amazon ECR.... 
     - aws --version
-    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY
+#    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY
   build: 
     commands: 
     - echo Build started on `date` 
