@@ -24,4 +24,4 @@ phases:
     - printf '[{"name":"SpringBootAppContainer", "imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
   files:
-    - imagedefinitions.json
+    - image_definitions.json
