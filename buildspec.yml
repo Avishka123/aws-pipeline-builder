@@ -1,14 +1,20 @@
 version: 0.2
+
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+  parameter-store:
+    DOCKER_REGISTRY: /CodeBuild/registry
+
 phases: 
   pre_build: 
     commands: 
     - echo Logging in to Amazon ECR.... 
     - aws --version
-    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $steps.login-ecr.outputs.registry
-    - COMMIT_HASH=latest
+    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY
     - IMAGE_TAG=latest
     - APPLICATION_NAME=cpcoludregistry
-    - REPOSITORY_URI= $steps.login-ecr.outputs.registry/$APPLICATION_NAME
+    - REPOSITORY_URI= $DOCKER_REGISTRY/$APPLICATION_NAME
   build: 
     commands: 
     - echo Build started on `date` 
