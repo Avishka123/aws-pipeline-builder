@@ -4,7 +4,7 @@ env:
   variables:
     JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
   parameter-store:
-    DOCKER_REGISTRY: /CodeBuild/registry
+    DOCKER_REGISTRY: registry
 
 phases: 
   pre_build: 
