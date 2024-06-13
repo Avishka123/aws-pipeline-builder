@@ -3,9 +3,9 @@ version: 0.2
 phases:
   install:
     commands:
-       echo "Installing Docker..."
-       docker info
-       echo "Installing build tools..." (replace with your specific build tool installation commands if needed)
+      - echo "Installing Docker..."
+      - docker info
+      - echo "Installing build tools..." (replace with your specific build tool installation commands if needed)
   pre_build:
     commands:
       - echo "Pre-build steps..." (add any pre-build steps here, like running tests)
@@ -16,12 +16,12 @@ phases:
       IMAGE_TAG: latest
     commands:
       - echo "Building Docker image..."
-      -  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .  (replace placeholders with your details)
+      -  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
   post_build:
     env:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REIGON: us-east-1
+      AWS_REGION: us-east-1
       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       ECR_REPOSITORY: cpcoludregistry
       IMAGE_TAG: latest
