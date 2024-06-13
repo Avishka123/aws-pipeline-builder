@@ -11,9 +11,7 @@ phases:
   build:
     commands:
       - echo "Building Docker image..."
-      - >-
-        aws ecr get-login-password --region us-east-1 | docker login --username
-        AWS --password-stdin $ECR_REGISTRY
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
       - 'docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
   post_build:
     commands:
@@ -27,3 +25,5 @@ env:
     ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
     IMAGE_NAME: cpcoludregistry
     IMAGE_TAG: latest
+
+
