@@ -4,11 +4,11 @@ phases:
     commands: 
     - echo Logging in to Amazon ECR.... 
     - aws --version
-    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin --option $steps.login-ecr.outputs.registry
+    - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $steps.login-ecr.outputs.registry
     - COMMIT_HASH=latest
     - IMAGE_TAG=latest
     - APPLICATION_NAME=cpcoludregistry
-    - REPOSITORY_URI= --option $steps.login-ecr.outputs.registry/$APPLICATION_NAME
+    - REPOSITORY_URI= $steps.login-ecr.outputs.registry/$APPLICATION_NAME
   build: 
     commands: 
     - echo Build started on `date` 
