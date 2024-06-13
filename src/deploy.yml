@@ -1,22 +1,4 @@
 version: 0.2
-phases:
-  install:
-    commands:
-      - echo "Installing Docker..."
-      - docker info
-      - echo "Installing build tools..."
-  pre_build:
-    commands:
-      - echo "Pre-build steps..."
-  build:
-    commands:
-      - echo "Building Docker image..."
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
-      - 'docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .'
-  post_build:
-    commands:
-      - echo "Pushing Docker image to ECR..."
-      - 'docker push $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
 artifacts:
   files:
     - cpcoludregistry.tar.gz
@@ -25,5 +7,11 @@ env:
     ECR_REGISTRY: '${{ steps.login-ecr.outputs.registry }}'
     IMAGE_NAME: cpcoludregistry
     IMAGE_TAG: latest
+
+build:
+  commands:
+    - echo "Building Docker image..."
+    - docker login -u AWS -p $ECR_PASSWORD $ECR_REGISTRY
+    - docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
 
 
