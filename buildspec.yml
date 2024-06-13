@@ -3,6 +3,9 @@ version: 0.2
 env:
   variables:
     JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+    APPLICATION_NAME: "cpcoludregistry"
+    IMAGE_TAG: "latest"
+    REPOSITORY_URI: $DOCKER_REGISTRY/$APPLICATION_NAME
   parameter-store:
     DOCKER_REGISTRY: registry
 
@@ -12,15 +15,12 @@ phases:
     - echo Logging in to Amazon ECR.... 
     - aws --version
     - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY
-    - IMAGE_TAG=latest
-    - APPLICATION_NAME=cpcoludregistry
-    - REPOSITORY_URI= $DOCKER_REGISTRY/$APPLICATION_NAME
   build: 
     commands: 
     - echo Build started on `date` 
     - echo Building the Docker image... 
     - docker build -t $APPLICATION_NAME:$IMAGE_TAG .
-    - docker tag $APPLICATION_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG 
+    - docker tag $APPLICATION_NAME:$IMAGE_TAG DOCKER_REGISTRY:$IMAGE_TAG
   post_build: 
     commands: 
     - echo Build completed on `date` 
