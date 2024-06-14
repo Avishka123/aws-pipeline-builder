@@ -7,7 +7,9 @@ phases:
 
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
+      - echo "Logging in to Amazon ECR..."
+      - echo "Insert the breakpoint command into your command list"
+      - codebuild-breakpoint
       - $(aws ecr get-login --region $AWS_REGION --no-include-email)
       - REPOSITORY_URI=$ECR_REGISTRY/$AWS_ECR_REPO
       - IMAGE_TAG=latest  # Use CODEBUILD_BUILD_ID or 'latest'
