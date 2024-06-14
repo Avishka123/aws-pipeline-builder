@@ -18,4 +18,4 @@ COPY --from=builder /aws-pipeline-builder/build/libs/*.jar aws-pipeline-builder.
 EXPOSE 8080
 
 # Start the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "aws-pipeline-builder.jar"]
