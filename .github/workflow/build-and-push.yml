@@ -2,31 +2,27 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      docker: 18
-
+    commands:
+      - pip3 install -q awscli --upgrade --user
+      - yum -q install -y jq
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
-      - echo "Insert the breakpoint command into your command list"
-      - codebuild-breakpoint
-      - $(aws ecr get-login --region $AWS_REGION --no-include-email)
-      - REPOSITORY_URI=$ECR_REGISTRY/$AWS_ECR_REPO
-      - IMAGE_TAG=latest  # Use CODEBUILD_BUILD_ID or 'latest'
-
+      ### Login to Amazon ECR
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+      ### Pulling the image
+      - echo Pulling latest image from Docker Hub
+      - docker pull $AWS_ECR_REPO:$IMAGE_TAG
+      ### Creating the ECR repository
+      - aws ecr describe-repositories --repository-names ${AWS_ECR_REPO} || aws ecr create-repository --repository-name ${AWS_ECR_REPO}
   build:
     commands:
+      ### Building the image
       - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
-
+      - docker tag $AWS_ECR_REPO:$IMAGE_TAG $ECR_REGISTRY/$AWS_ECR_REPO:$IMAGE_TAG
+      - echo Build completed on `date`
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-
-artifacts:
-  files:
-    - image_definitions.json  # Optional (for deployments using image definitions)
-
+      ### Publish the docker image to ECR
+      - echo Pushing the Docker image...
+      - docker push $ECR_REGISTRY/$AWS_ECR_REPO:$IMAGE_TAG
