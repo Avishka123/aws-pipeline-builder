@@ -10,7 +10,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --region $AWS_REGION --no-include-email)
       - REPOSITORY_URI=$ECR_REGISTRY/$AWS_ECR_REPO
-      - IMAGE_TAG=${{ github.sha }}  # Use CODEBUILD_BUILD_ID or 'latest'
+      - IMAGE_TAG=latest  # Use CODEBUILD_BUILD_ID or 'latest'
 
   build:
     commands:
