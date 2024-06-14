@@ -1,8 +1,7 @@
 name: AWS Code Pipeline Docker Push
-'on':
+on:
   push:
-    branches:
-      - master
+    branches: [ "master" ]
 jobs:
   AWS-Code-Pipeline-Test:
     name: Build Docker Image

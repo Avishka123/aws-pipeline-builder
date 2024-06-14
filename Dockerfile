@@ -1,14 +1,21 @@
-FROM amazoncorretto:17-alpine-jdk AS build
-WORKDIR /workspace/app
+# Stage 1: Build with Gradle (slim JDK image)
+FROM gradle:8-jdk17-alpine AS builder
 
-COPY . /workspace/app
-RUN --mount=type=cache,target=/root/.gradle ./gradlew clean build --no-daemon -x test
-RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
+# Copy project files
+COPY . /app
 
-FROM amazoncorretto:17-alpine-jdk
-VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/build/dependency
-COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java", "-cp","app:app/lib/*", "com.example.aws.code.pipeline.Application"]
+# Build the application with Gradle
+WORKDIR /app
+RUN gradle build
+
+# Stage 2: Slim runtime image (openjdk)
+FROM openjdk:17-jre-slim
+
+# Copy application JAR
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Expose port (adjust if your application uses a different port)
+EXPOSE 8080
+
+# Start the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
