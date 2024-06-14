@@ -2,7 +2,7 @@
 FROM gradle:8-jdk17-alpine AS builder
 
 # Copy project files
-COPY . /app
+COPY . /aws-pipeline-builder
 
 # Build the application with Gradle
 WORKDIR /aws-pipeline-builder
