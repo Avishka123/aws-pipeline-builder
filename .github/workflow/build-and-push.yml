@@ -9,7 +9,9 @@ phases:
     commands:
       ### Login to Amazon ECR
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+      - SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id $SECRET_NAME --query SecretString --output text)
+      - aws ecr get-login-password --region $AWS_REGION --registry-ids $SECRET_VALUE | docker login --username AWS --password-stdin
+#      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
       ### Pulling the image
       - echo Pulling latest image from Docker Hub
       - docker pull $AWS_ECR_REPO:$IMAGE_TAG
