@@ -16,7 +16,7 @@ phases:
       - echo Pulling latest image from Docker Hub
       - docker pull $AWS_ECR_REPO:$IMAGE_TAG
       ### Creating the ECR repository
-      - aws ecr describe-repositories --repository-names ${AWS_ECR_REPO} || aws ecr create-repository --repository-name ${AWS_ECR_REPO}
+#      - aws ecr describe-repositories --repository-names ${AWS_ECR_REPO} || aws ecr create-repository --repository-name ${AWS_ECR_REPO}
   build:
     commands:
       ### Building the image
