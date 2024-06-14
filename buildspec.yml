@@ -1,40 +1,36 @@
-version: 0.2
+name: AWS Code Pipeline Docker Push
+on:
+  push:
+    branches: [ "master" ]
 
-env:
-  variables:
-    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
-    APPLICATION_NAME: "cpcoludregistry"
-    IMAGE_TAG: "latest"
-    REGION: us-east-1
-  parameter-store:
-    DOCKER_REGISTRY: registry
+jobs:
+  AWS-Code-Pipeline-Test:
 
-phases:
-  pre_build:
-    commands:
-      - echo Logging in to Amazon ECR....
-      - aws --version
-      - $(aws ecr get-login --no-include-email --region $REGION)
-      # Get commit hash value to tag the image
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
-      # Replace with your application name
-      - APPLICATION_NAME=spring-boot-sample-app
-      # Replace with this 435320931996.dkr.ecr.ap-south-1.amazonaws.com to your repository URI
-      - REPOSITORY_URI=$DOCKER_REGISTRY/$APPLICATION_NAME
-  build: 
-    commands: 
-    - echo Build started on `date` 
-    - echo Building the Docker image... 
-    - docker build -t $APPLICATION_NAME:$IMAGE_TAG .
-    - docker tag $APPLICATION_NAME:$IMAGE_TAG DOCKER_REGISTRY:$IMAGE_TAG
-  post_build: 
-    commands: 
-    - echo Build completed on `date` 
-    - echo pushing to repo
-    - docker push $REPOSITORY_URI:$IMAGE_TAG
-    - echo Writing image definitions file... 
-    - printf '[{"name":"SpringBootAppContainer", "imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-artifacts:
-  files:
-    - image_definitions.json
+
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup AWS ECR Details
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{secrets.AWS_REGION}}
+
+
+      - name: Login to Amazon ECR
+        id: login-pf-aws-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+
+      - name: Build and push the tagged docker image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
