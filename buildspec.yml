@@ -1,14 +1,11 @@
 version: 0.2
 
-
 phases:
   install:
     runtime-versions: {}  # Inherit from environment
     commands:
       - echo install begin
-      - echo 'export PATH=/path/to/aws/bin:$PATH' >> ~/.bashrc  # Replace with actual path
-      - source ~/.bashrc
-      - echo Entered the install phase...
+      - echo end install
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
@@ -37,7 +34,3 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       - echo $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"spring-boot","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json
-artifacts:
-  files: imagedefinitions.json
