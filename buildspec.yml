@@ -14,7 +14,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - docker --version
-      - aws ecr get-login --region $(echo $AWS_DEFAULT_REGION)
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 422457112101.dkr.ecr.us-east-1.amazonaws.com)
       - echo Entered the pre_build phase...
       - REPOSITORY_URI=422457112101.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/cpcoludregistry
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
