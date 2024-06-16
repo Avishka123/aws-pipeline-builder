@@ -3,20 +3,17 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions: {}  # Inherit from environment
     commands:
-      # Add Docker's official GPG key:
       - echo install begin
-      - sudo apt-get update
-      - sudo apt-get install ca-certificates curl
-      - sudo install -m 0755 -d /etc/apt/keyrings
-      - sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-      - sudo chmod a+r /etc/apt/keyrings/docker.asc
+      - apt-get update && apt-get install -y curl wget
+      # Choose one installation method (replace <version> with desired version):
+      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -  # Official APT repository
+          # OR
+#      - wget https://get.docker.com -O docker.sh  # Download Docker installer script
+      - curl -fsSL https://download.docker.com/linux/ubuntu/$(lsb_release -cs)/docker-<version>.deb -o docker.deb  # Download specific version (optional)
+      - sudo apt-get install -y docker.deb  # Install Docker using downloaded package
 
-      # Add the repository to Apt sources:
-      - echo hello docker
-      - sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      - sudo apt-get update
-      - sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
