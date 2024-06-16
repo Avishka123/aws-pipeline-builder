@@ -15,7 +15,7 @@ phases:
       - aws --version
       - docker --version
       - sudo groupadd docker
-      - sudo usermod -aG docker $USER
+      - sudo usermod -a docker $USER
       - newgrp docker
       - $(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 422457112101.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com)
       - echo Entered the pre_build phase...
