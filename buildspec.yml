@@ -14,7 +14,6 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - docker --version
-      - aws ecr
       - aws ecr get-login --region $(echo $AWS_DEFAULT_REGION)
       - echo Entered the pre_build phase...
       - REPOSITORY_URI=422457112101.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/cpcoludregistry
