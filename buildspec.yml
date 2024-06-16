@@ -8,6 +8,9 @@ phases:
       - echo install begin
       - echo 'export PATH=/path/to/aws/bin:$PATH' >> ~/.bashrc  # Replace with actual path
       - source ~/.bashrc
+      - echo Entered the install phase...
+      - apt-get update -y
+
 #      - echo install begin
 #      - apt-get update && apt-get install -y curl wget
 #      # Choose one installation method (replace <version> with desired version):
