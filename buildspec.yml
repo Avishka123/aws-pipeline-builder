@@ -5,6 +5,9 @@ phases:
   install:
     runtime-versions: {}  # Inherit from environment
     commands:
+      - echo install begin
+      - echo 'export PATH=/path/to/aws/bin:$PATH' >> ~/.bashrc  # Replace with actual path
+      - source ~/.bashrc
 #      - echo install begin
 #      - apt-get update && apt-get install -y curl wget
 #      # Choose one installation method (replace <version> with desired version):
