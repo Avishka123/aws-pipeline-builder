@@ -9,17 +9,6 @@ phases:
       - echo 'export PATH=/path/to/aws/bin:$PATH' >> ~/.bashrc  # Replace with actual path
       - source ~/.bashrc
       - echo Entered the install phase...
-      - apt-get update -y
-
-#      - echo install begin
-#      - apt-get update && apt-get install -y curl wget
-#      # Choose one installation method (replace <version> with desired version):
-#      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -  # Official APT repository
-#          # OR
-##      - wget https://get.docker.com -O docker.sh  # Download Docker installer script
-#      - curl -fsSL https://download.docker.com/linux/ubuntu/$(lsb_release -cs)/docker-<version>.deb -o docker.deb  # Download specific version (optional)
-#      - sudo apt-get install -y docker.deb  # Install Docker using downloaded package
-
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
