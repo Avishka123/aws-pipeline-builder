@@ -6,11 +6,11 @@
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "executionRoleArn": "arn:aws:iam::<your-account-id>:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::422457112101:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "AwsPipelineBuilderContainer",
-      "image": "<your-account-id>.dkr.ecr.us-east-1.amazonaws.com/cpcoludregistry:latest",
+      "image": "422457112101.dkr.ecr.us-east-1.amazonaws.com/cpcoludregistry:latest",
       "portMappings": [
         {
           "containerPort": 80,
