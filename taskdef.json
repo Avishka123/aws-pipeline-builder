@@ -3,11 +3,14 @@
   "cpu": "256",
   "memory": "512",
   "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "executionRoleArn": "arn:aws:iam::<your-account-id>:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "base.container",
-      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/cpcoludregistry:latest",
+      "name": "AwsPipelineBuilderContainer",
+      "image": "<your-account-id>.dkr.ecr.us-east-1.amazonaws.com/cpcoludregistry:latest",
       "portMappings": [
         {
           "containerPort": 80,
