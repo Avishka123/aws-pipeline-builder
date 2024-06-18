@@ -1,21 +1,17 @@
-# Stage 1: Build with Gradle (slim JDK image)
-FROM gradle:8-jdk17-alpine AS builder
+FROM gradle:8-jdk17-alpine AS build
 
-#Copy project files
-COPY . /aws-pipeline-builder
-
-# Build the application with Gradle
 WORKDIR /aws-pipeline-builder
-RUN gradle build
 
-# Stage 2: Slim runtime image (openjdk)
+COPY . .
+
+RUN chmod +x gradlew
+RUN ./gradlew build
+
 FROM openjdk:17-jre-slim
 
-# Copy application JAR
-COPY --from=builder /aws-pipeline-builder/build/libs/*.jar aws-pipeline-builder.jar
+WORKDIR /aws-pipeline-builder
 
-# Expose port (adjust if your application uses a different port)
-EXPOSE 8080
+COPY --from=build /aws-pipeline-builder/build/libs/*.jar aws-pipeline-builder.jar
 
-# Start the application
 ENTRYPOINT ["java", "-jar", "aws-pipeline-builder.jar"]
+
