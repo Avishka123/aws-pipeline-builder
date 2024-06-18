@@ -1,22 +1,9 @@
 version: 0.0
-
-# Define the ECS task definition file location
-file_ecs_task: taskdef.json
-
-# Define the service name within the ECS cluster
-service_name: QACodePipelineService
-
-# Optional: Define the container name within the task definition
-# If omitted, CodeDeploy will use the first container defined
-container_name: AwsPipelineBuilderContainer
-
-# Optional: Define port where traffic is routed during deployment
-port_mapping:
-  http: 80  # Example port mapping for HTTP traffic
-
-# Optional: Define hooks to execute scripts during deployment lifecycle events
-#hooks:
-#  post_install:
-#    execution_role_arn: "arn:aws:iam::422457112101:role/ecsTaskExecutionRole"
-#    pathname: /path/to/post_install_validation.sh  # Script path relative to deployment package
-#    timeout_seconds: 30
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:aws-region-id:aws-account-id:task-definition/aws-pipeline-builder-task-definition:revision-number"
+        LoadBalancerInfo:
+          ContainerName: "AwsPipelineBuilderContainer"
+          ContainerPort: 80

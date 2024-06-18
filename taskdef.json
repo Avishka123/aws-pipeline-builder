@@ -10,7 +10,7 @@
   "containerDefinitions": [
     {
       "name": "AwsPipelineBuilderContainer",
-      "image": "422457112101.dkr.ecr.us-east-1.amazonaws.com/cpcoludregistry:latest",
+      "image": "422457112101.dkr.ecr.us-east-1.amazonaws.com/cpcoludregistry:build-38f252ae-ec49-4ce5-89c4-4e45aef189e3",
       "portMappings": [
 
         {
