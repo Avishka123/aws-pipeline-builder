@@ -1,4 +1,4 @@
-FROM gradle:8-jdk17-alpine AS build
+FROM eclipse-temurin:17-jdk-focal AS build
 
 WORKDIR /aws-pipeline-builder
 
@@ -7,7 +7,7 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew build
 
-FROM openjdk:17-jre-slim
+FROM eclipse-temurin:17-jdk-focal
 
 WORKDIR /aws-pipeline-builder
 
