@@ -1,5 +1,5 @@
 # Stage 1: Build with Gradle (slim JDK image)
-FROM docker.io/library/gradle:8-jdk17-alpine AS builder
+FROM gradle:8-jdk17-alpine AS builder
 
 #Copy project files
 COPY . /aws-pipeline-builder
