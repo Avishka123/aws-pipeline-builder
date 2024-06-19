@@ -44,7 +44,7 @@ phases:
       - docker push $REPOSITORY_URI:latest  # Push image with latest tag
       - echo "** Writing Image Definitions File... **"  # Informative message
       - # Create image definition with latest tag only (remove commented lines)
-        printf '[{"name":"testTask.testContainer","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+        printf '[{"name":"testContainer","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 artifacts:
   files:
     - imagedefinitions.json  # Specify artifact file
