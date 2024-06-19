@@ -36,7 +36,7 @@
   "family": "testTask",
   "executionRoleArn": "arn:aws:iam::422457112101:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 5,
+  "revision": 11,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
