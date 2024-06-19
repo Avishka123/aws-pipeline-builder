@@ -1,5 +1,5 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:422457112101:task-definition/testTask:5",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:422457112101:task-definition/testTask:13",
   "containerDefinitions": [
     {
       "name": "testContainer",
@@ -78,7 +78,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-06-19T03:49:01.551Z",
-  "registeredBy": "arn:aws:iam::422457112101:user/avishka",
+  "registeredAt": "2024-06-19T07:55:49.608Z",
+  "registeredBy": "arn:aws:sts::422457112101:assumed-role/AWSCodePipelineServiceRole-us-east-1-AWSCodeBuilderPipeline/1718783749296",
   "tags": []
 }
