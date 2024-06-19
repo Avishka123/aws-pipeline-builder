@@ -1,40 +1,50 @@
 version: 0.2
 
+# Define phases for the build process
 phases:
   install:
-    runtime-versions: {}  # Inherit from environment
+    runtime-versions: {}  # Inherit from environment (no need to specify)
     commands:
-      - echo install begin
-      - echo end install
+      - echo "** Install Phase Begin **"  # Informative message
+      - echo "** End Install Phase **"  # Informative message
+
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - docker --version
-      - ECR_PASSWORD=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
-      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-      - REPOSITORY_BASE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-      - REPOSITORY_NAME=cpcoludregistry
-      - echo -n ${ECR_PASSWORD} | docker login --username AWS --password-stdin ${REPOSITORY_BASE}
-      - echo Entered the pre_build phase...
-      - REPOSITORY_URI=${REPOSITORY_BASE}/${REPOSITORY_NAME}
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=build-${COMMIT_HASH}
+      - echo "** Logging in to Amazon ECR... **"  # Informative message
+      - aws --version  # Check AWS CLI version (optional)
+      - docker --version  # Check Docker version (optional)
+      - # Retrieve ECR login password securely
+        ECR_PASSWORD=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+      - # Get AWS account ID
+        AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+      - # Build the repository URI dynamically
+        REPOSITORY_BASE=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - # Set the repository name
+        REPOSITORY_NAME=cpcoludregistry
+      - # Login to ECR using retrieved password
+        echo -n ${ECR_PASSWORD} | docker login --username AWS --password-stdin ${REPOSITORY_BASE}
+      - echo "** Entered the pre-build phase... **"  # Informative message
+      - # Build the full repository URI with image name
+        REPOSITORY_URI=${REPOSITORY_BASE}/${REPOSITORY_NAME}
+      - # Extract first 7 characters of commit hash for tag
+        COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - # Define image tag with build and commit hash
+        IMAGE_TAG=build-${COMMIT_HASH}
+
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-#      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - echo "** Build Phase Started on `date` **"  # Informative message with date
+      - echo "** Building the Docker image... **"  # Informative message
+      - docker build -t $REPOSITORY_URI:latest .  # Build image with latest tag
+
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-#      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - echo $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"testTask.container.testContainer","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - echo "** Build Completed on `date` **"  # Informative message with date
+      - echo "** Pushing the Docker Image... **"  # Informative message
+      - docker push $REPOSITORY_URI:latest  # Push image with latest tag
+      - echo "** Writing Image Definitions File... **"  # Informative message
+      - # Create image definition with latest tag only (remove commented lines)
+        printf '[{"name":"testTask.testContainer","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 artifacts:
-  files: imagedefinitions.json
-
+  files:
+    - imagedefinitions.json  # Specify artifact file
